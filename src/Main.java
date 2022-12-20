@@ -6,7 +6,6 @@ public class Main {
 
     public static void main(String[] args) {
 
-
         char[][] gameBoard = {
                 {' ', '|', ' ', '|', ' '},
                 {'-', '+', '-', '+', '-'},
@@ -17,9 +16,10 @@ public class Main {
         printGameBoard(gameBoard);
 
         while (true) {
+            Scanner scanner = new Scanner(System.in);
             //prompt user for number, and draw the X at that position
             System.out.println("Enter number between 1-9");
-            Scanner scanner = new Scanner(System.in);
+
             int playerPos = scanner.nextInt();
             //making sure the user doesnt enter any taken position from before
             while (playerPositions.contains(playerPos) || cpuPositions.contains(playerPos)) {
@@ -28,6 +28,12 @@ public class Main {
             }
 
             placePiece(gameBoard, playerPos, "player");
+            String result = checkWinner();
+            if (result.length() > 0) {
+                //printGameBoard(gameBoard);
+                System.out.println(result);
+                break;
+            }
 
             //generate a new random number, and draw the O at that position
             Random rand = new Random();
@@ -37,20 +43,17 @@ public class Main {
                 cpuPos = rand.nextInt(9) + 1;
             }
             placePiece(gameBoard, cpuPos, "cpu");
-            String result = checkWinner();
-            if(result.length() > 0){
-                printGameBoard(gameBoard);
-                System.out.println(result);
-                break;
-            }
 
             printGameBoard(gameBoard);
+
             result = checkWinner();
-            if(result.length() > 0){
-                printGameBoard(gameBoard);
+            if (result.length() > 0) {
+                //printGameBoard(gameBoard);
                 System.out.println(result);
                 break;
             }
+            //keep printing while no one has won yet
+            //printGameBoard(gameBoard);
 
         }
     }
@@ -136,7 +139,8 @@ public class Main {
                 return "Congrats, You Won.";
             } else if (cpuPositions.containsAll(l)) {
                 return "go home bro.";
-            }else if (playerPositions.size() + cpuPositions.size() == 9) {
+            }
+            if (playerPositions.size() + cpuPositions.size() == 9) {
                 return "TIE";
             }
         }
